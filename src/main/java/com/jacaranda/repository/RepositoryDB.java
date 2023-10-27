@@ -47,5 +47,27 @@ public class RepositoryDB {
 		
 		return resultList;
 	}
+
+	public static <T> List<T> add(Class<T> c, Object obj) throws Exception {
+		Transaction transation = null;
+		Session session = null;
+		List<T> resultList = null;
+		try {
+			session = ConnectionDB.getSessionFactory().openSession();
+			transation = session.beginTransaction();
+		} catch (Exception e) {
+			throw new Exception("error en la BD");
+		}
+		
+		try {
+			session.merge(obj);
+			transation.commit();
+		} catch (Exception e) {
+			transation.rollback();
+			throw new Exception("error al añadir");
+		}
+		
+		return resultList;
+	}
 	
 }
