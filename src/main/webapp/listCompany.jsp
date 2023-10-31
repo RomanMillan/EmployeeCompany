@@ -56,6 +56,7 @@
 								<th>Id</th>
 								<th>Nombre</th>
 								<th>Apellidos</th>
+								<th>Editar</th>
 		
 							</thead>
 							<tbody>
@@ -64,6 +65,12 @@
 									<td><%=e.getId() %></td>
 									<td><%=e.getFirstName() %></td>
 									<td><%=e.getLastName() %></td>
+									<td>
+										<form action="updateEmployee.jsp" method="get">
+											<input name="idEmployee" value="<%=e.getId() %>" hidden>
+											<button class="btn btn-warning" type="submit">Editar</button>
+										</form>
+									</td>
 								</tr>
 							<%} %>
 							</tbody>
