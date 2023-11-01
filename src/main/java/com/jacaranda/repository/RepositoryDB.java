@@ -10,7 +10,6 @@ import com.jacaranda.utility.ConnectionDB;
 public class RepositoryDB {
 
 	public static <T> T find(Class<T> c, int id) throws Exception {
-		Transaction transation = null;
 		Session session = null;
 		T result = null;
 		try {
@@ -30,7 +29,6 @@ public class RepositoryDB {
 	
 	
 	public static <T> List<T> findAll(Class<T> c) throws Exception {
-		Transaction transation = null;
 		Session session = null;
 		List<T> resultList = null;
 		try {
@@ -48,10 +46,9 @@ public class RepositoryDB {
 		return resultList;
 	}
 
-	public static <T> List<T> add(Class<T> c, Object obj) throws Exception {
+	public static Object add(Object obj) throws Exception {
 		Transaction transation = null;
 		Session session = null;
-		List<T> resultList = null;
 		try {
 			session = ConnectionDB.getSessionFactory().openSession();
 			transation = session.beginTransaction();
@@ -67,7 +64,29 @@ public class RepositoryDB {
 			throw new Exception("error al añadir");
 		}
 		
-		return resultList;
+		return obj;
 	}
+	
+	public static Object delete(Object obj) throws Exception {
+		Transaction transation = null;
+		Session session = null;
+		try {
+			session = ConnectionDB.getSessionFactory().openSession();
+			transation = session.beginTransaction();
+		} catch (Exception e) {
+			throw new Exception("error en la BD");
+		}
+		
+		try {
+			session.remove(obj);
+			transation.commit();
+		} catch (Exception e) {
+			transation.rollback();
+			throw new Exception("error al borrar");
+		}
+		
+		return obj;
+	}
+	
 	
 }

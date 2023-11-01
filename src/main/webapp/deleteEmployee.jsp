@@ -1,27 +1,19 @@
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.jacaranda.repository.RepositoryDB"%>
 <%@page import="com.jacaranda.model.Employee"%>
+<%@page import="com.jacaranda.repository.RepositoryDB"%>
 <%@page import="com.jacaranda.model.Company"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-	<%
+	<head>
+		<meta charset="UTF-8">
+		<title>Insert title here</title>
+	</head>
+	<body>
+		<%
 	
-		ArrayList<Company> companies = null;
 		Employee employee = new Employee();
-		
-		try{
-			companies = (ArrayList<Company>) RepositoryDB.findAll(Company.class);
-		}catch(Exception e){
-			
-		}
-		
 
 		if(request.getParameter("submit") != null){
 			String id = (String) request.getParameter("id");
@@ -47,7 +39,9 @@
 			employee.setDateOfBirth(birthdate);
 			employee.setCompany(companyObj);
 			
-			RepositoryDB.add(employee);
+			RepositoryDB.delete(employee);
+			
+			
 					
 		}else{			
 			String idEmployee = request.getParameter("idEmployee");
@@ -61,9 +55,9 @@
 	%>
 	
 	<div class="container">
-			<h1>Editar Empleado</h1>
+			<h1>Borrar Empleado</h1>
 			
-			<form class="form" action="updateEmployee.jsp" method="post">
+			<form class="form" action="deleteEmployee.jsp" method="post">
 				<label>Id</label>
 				<input type="text" name="id" class="form-control" value="<%=employee.getId() %>" readonly="readonly"> <br>
 				<label>Nombre</label>
@@ -72,36 +66,14 @@
 				<input type="text" name="lastName" class="form-control" value="<%=employee.getLastName() %>"><br>
 				<label>Correo</label>
 				<input type="email" name="email" class="form-control" value="<%=employee.getEmail() %>"><br>
-				<div class="input-group mb-3">
-				  <div class="input-group-prepend">
-				    <label class="input-group-text">Sexo</label>
-				  </div>
-				  <select name="gender" class="custom-select">
-				  <%if(employee.getGender().equals("Male")){ %>
-				   	 <option value="Male" selected="selected">Masculino</option>
-				   	  <option value="Female">Femenino</option>
-				    <%}else{%>
-				   	 <option value="Male">Masculino</option>
-				  	  <option value="Female" selected="selected">Femenino</option>
-				    <% }%>
-				  </select>
-				</div>
+				<label>Sexo</label>
+				<input type="text" name="gender" value="<%=employee.getGender()%>"> <br>
 				<label>Fecha de nacimiento</label>
-				<input type="date" name="birthdate" class="form-control" value="<%=employee.getDateOfBirth() %>">
-				
-				<div class="input-group mb-3">
-				  <div class="input-group-prepend">
-				    <label class="input-group-text">Compañia</label>
-				  </div>
-				  <select name="company" class="custom-select">
-				  <%for(Company c: companies){ %>
-				    <option value="<%=c.getId() %>"><%=c.getName() %></option>
-				   <%} %>
-				  </select>
-				 </div>
-				<button type="submit" name="submit" class="btn btn-primary">Añadir</button>
+				<input type="date" name="birthdate" class="form-control" value="<%=employee.getDateOfBirth() %>"><br>
+				<label>Empresa</label>
+				<input type="text" name="company" value="<%=employee.getCompany().getId()%>"><br>
+				<button type="submit" name="submit" class="btn btn-danger">Borrar</button>
 			</form>
 		</div>
-	
-</body>
+	</body>
 </html>

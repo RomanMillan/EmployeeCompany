@@ -43,7 +43,7 @@
 					e.setDateOfBirth(birthdate);
 					e.setCompany(c);
 					
-					RepositoryDB.add(Employee.class, e);
+					RepositoryDB.add(e);
 					
 				}catch(Exception e){
 					

@@ -57,7 +57,7 @@
 								<th>Nombre</th>
 								<th>Apellidos</th>
 								<th>Editar</th>
-		
+								<th>Borrar</th>
 							</thead>
 							<tbody>
 							<%for(Employee e: c.getEmployees()){ %>
@@ -69,6 +69,12 @@
 										<form action="updateEmployee.jsp" method="get">
 											<input name="idEmployee" value="<%=e.getId() %>" hidden>
 											<button class="btn btn-warning" type="submit">Editar</button>
+										</form>
+									</td>
+									<td>
+										<form action="deleteEmployee.jsp" method="post">
+											<input name="idEmployee" value="<%=e.getId() %>" hidden>
+											<button class="btn btn-danger" type="submit">Borrar</button>
 										</form>
 									</td>
 								</tr>
