@@ -13,7 +13,6 @@ public class User {
 	@Id
 	private String user;
 	private String password;
-	@Column(name="role")
 	private char admin;
 	
 //	getters and setters

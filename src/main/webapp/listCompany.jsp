@@ -16,26 +16,31 @@
 	<body>
 	<div class="container">
 		<%
-			/* Comprueba que el usuario está logeado */
-			if(session.getAttribute("userId")== null){
-				response.sendRedirect("error.jsp?msg=debe estar logeado");
-				return;
-			}
+		/* Comprueba que el usuario está logeado */
+		if(session.getAttribute("userId")== null){
+			response.sendRedirect("error.jsp?msg=debe estar logeado");
+			return;
+		}
+	
+		ArrayList<Company> result = null;
 		
-			ArrayList<Company> result = null;
+		try{
+			result = (ArrayList<Company>) RepositoryDB.findAll(Company.class);
+		}catch(Exception e){
 			
-			try{
-				result = (ArrayList<Company>) RepositoryDB.findAll(Company.class);
-			}catch(Exception e){
-				
-			}
-		%>
+		}
+		%>		
+		<form action="login.jsp" method="post">
+			<button type="submit" name="closeSession" class="btn btn-danger">Cerrar sesión</button>
+		</form>
 		
-		<%for (Company c: result){
+		<%
+		for (Company c: result){
 		
 			int numberEmployees = c.getEmployees().size();
 			int numberProject = c.getCompanyProject().size();
 		%>
+		
 		<h2>Empresa</h2>
 		<table class="table">
 			<thead class="thead-dark">
@@ -62,8 +67,10 @@
 								<th>Id</th>
 								<th>Nombre</th>
 								<th>Apellidos</th>
+								<%if(session.getAttribute("admin")!= null){%>
 								<th>Editar</th>
 								<th>Borrar</th>
+								<%} %>
 							</thead>
 							<tbody>
 							<%for(Employee e: c.getEmployees()){ %>
@@ -71,6 +78,7 @@
 									<td><%=e.getId() %></td>
 									<td><%=e.getFirstName() %></td>
 									<td><%=e.getLastName() %></td>
+									<%if(session.getAttribute("admin")!= null){%>
 									<td>
 										<form action="updateEmployee.jsp" method="get">
 											<input name="idEmployee" value="<%=e.getId() %>" hidden>
@@ -84,7 +92,7 @@
 										</form>
 									</td>
 								</tr>
-							<%} %>
+							<%} }%>
 							</tbody>
 						</table>
 					</td>

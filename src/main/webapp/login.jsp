@@ -10,9 +10,11 @@
 		<title>Insert title here</title>
 	</head>
 	<body>	
-		
+
 		<%
-			if(request.getParameter("submit") != null){
+			if(request.getParameter("closeSession") != null){
+				session.invalidate();
+			}else if(request.getParameter("submit") != null){
 				String username = request.getParameter("username");
 				String password = request.getParameter("password");
 				
@@ -22,6 +24,10 @@
 						if(user.getPassword().equals(password)){
 							session.setAttribute("userId", username);
 							response.sendRedirect("listCompany.jsp");
+							System.out.print((Object)user.getAdmin());
+							if(user.getAdmin() == '1'){
+								session.setAttribute("admin", true);
+							}
 						}else{
 							response.sendRedirect("error.jsp?msg=contraseña erronea");
 						}
@@ -29,16 +35,15 @@
 						response.sendRedirect("error.jsp?msg=usuario no encontrado");
 					}
 				}
-				
 			}
 		%>
 		
 		<div class="container">
 			<form action="login.jsp" method="post">
 				<label>Usuario</label>
-				<input type="text" name="username">
+				<input type="text" name="username"> <br>
 				<label>Contraseña</label>
-				<input type="password" name="password">
+				<input type="password" name="password"><br>
 				<button type="submit" name="submit">Ingresar</button>
 			</form>
 		</div>
