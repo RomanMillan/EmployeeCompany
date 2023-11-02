@@ -16,6 +16,12 @@
 	<body>
 	<div class="container">
 		<%
+			/* Comprueba que el usuario está logeado */
+			if(session.getAttribute("userId")== null){
+				response.sendRedirect("error.jsp?msg=debe estar logeado");
+				return;
+			}
+		
 			ArrayList<Company> result = null;
 			
 			try{
