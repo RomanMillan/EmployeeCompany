@@ -25,6 +25,9 @@ public class Employee {
 	@JoinColumn(name="idCompany")
 	private Company company;
 
+	private char admin;
+	private String password;
+	
 
 //	getter and setter
 	public int getId() {
@@ -66,9 +69,6 @@ public class Employee {
 	public void setDateOfBirth(String dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
-	
-	
-	
 
 	public String getGender() {
 		return gender;
@@ -85,9 +85,25 @@ public class Employee {
 	public void setCompany(Company company) {
 		this.company = company;
 	}
+
+	public char getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(char admin) {
+		this.admin = admin;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
 	
 //	hashCode
-
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -104,8 +120,6 @@ public class Employee {
 		Employee other = (Employee) obj;
 		return id == other.id;
 	}
-	
-	
-	
+
 	
 }

@@ -30,9 +30,18 @@
 			
 		}
 		%>		
-		<form action="login.jsp" method="post">
-			<button type="submit" name="closeSession" class="btn btn-danger">Cerrar sesión</button>
-		</form>
+		<div class="row">
+			<div class="col">
+				<form action="asignWork.jsp" method="post">
+					<button type="submit" name="asignWork" class="btn btn-primary">Asignar Tarea</button>
+				</form>
+			</div>
+			<div class="col">			
+				<form action="login.jsp" method="post">
+					<button type="submit" name="closeSession" class="btn btn-danger">Cerrar sesión</button>
+				</form>
+			</div>
+		</div>
 		
 		<%
 		for (Company c: result){

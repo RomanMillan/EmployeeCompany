@@ -1,3 +1,4 @@
+<%@page import="com.jacaranda.model.Employee"%>
 <%@page import="com.jacaranda.model.User"%>
 <%@page import="com.jacaranda.repository.RepositoryDB"%>
 <%@page import="com.jacaranda.utility.ConnectionDB"%>
@@ -20,12 +21,11 @@
 				
 				if(username != "" && password != ""){
 					try{						
-						User user = RepositoryDB.find(User.class, username);
-						if(user.getPassword().equals(password)){
-							session.setAttribute("userId", username);
+						Employee employee = RepositoryDB.find(Employee.class, Integer.parseInt(username));
+						if(employee.getPassword().equals(password)){
+							session.setAttribute("employeeSession", employee);
 							response.sendRedirect("listCompany.jsp");
-							System.out.print((Object)user.getAdmin());
-							if(user.getAdmin() == '1'){
+							if(employee.getAdmin() == '1'){
 								session.setAttribute("admin", true);
 							}
 						}else{
@@ -35,13 +35,13 @@
 						response.sendRedirect("error.jsp?msg=usuario no encontrado");
 					}
 				}
-			}
+				}
 		%>
 		
 		<div class="container">
 			<form action="login.jsp" method="post">
 				<label>Usuario</label>
-				<input type="text" name="username"> <br>
+				<input type="number" name="username"> <br>
 				<label>Contraseña</label>
 				<input type="password" name="password"><br>
 				<button type="submit" name="submit">Ingresar</button>
