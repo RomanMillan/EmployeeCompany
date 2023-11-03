@@ -7,8 +7,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name="employeeProject")
 public class EmployeeProject {
 	
 	@Id
@@ -41,6 +43,8 @@ public class EmployeeProject {
 	public void setTimeWorked(int timeWorked) {
 		this.timeWorked = timeWorked;
 	}
+	
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(employee, project);
@@ -58,10 +62,4 @@ public class EmployeeProject {
 	}
 	
 	
-	
-
-	
-	
-	
-
 }

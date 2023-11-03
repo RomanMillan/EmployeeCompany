@@ -17,7 +17,7 @@
 	<div class="container">
 		<%
 		/* Comprueba que el usuario está logeado */
-		if(session.getAttribute("userId")== null){
+		if(session.getAttribute("employeeSession")== null){
 			response.sendRedirect("error.jsp?msg=debe estar logeado");
 			return;
 		}
@@ -32,7 +32,7 @@
 		%>		
 		<div class="row">
 			<div class="col">
-				<form action="asignWork.jsp" method="post">
+				<form action="assignWork.jsp" method="post">
 					<button type="submit" name="asignWork" class="btn btn-primary">Asignar Tarea</button>
 				</form>
 			</div>
