@@ -9,9 +9,13 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Insert title here</title>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+		<link href="style.css" rel="stylesheet">
+		
 	</head>
 	<body>	
-
+	<div class="container">
+	<h1>Ingresar</h1>
 		<%
 			if(request.getParameter("closeSession") != null){
 				session.invalidate();
@@ -41,12 +45,12 @@
 		<div class="container">
 			<form action="login.jsp" method="post">
 				<label>Usuario</label>
-				<input type="number" name="username"> <br>
+				<input type="number" name="username" class="form-control"> <br>
 				<label>Contraseña</label>
-				<input type="password" name="password"><br>
-				<button type="submit" name="submit">Ingresar</button>
+				<input type="password" name="password" class="form-control"><br>
+				<button type="submit" name="submit" class="btn btn-success">Ingresar</button>
 			</form>
 		</div>
-	
+	</div>
 	</body>
 </html>
