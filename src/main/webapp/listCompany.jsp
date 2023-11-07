@@ -32,8 +32,8 @@
 		%>		
 		<div class="row">
 			<div class="col">
-				<form action="assignWork.jsp" method="post">
-					<button type="submit" name="asignWork" class="btn btn-primary">Asignar Tarea</button>
+				<form action="selectWork.jsp" method="post">
+					<button type="submit" name="selectWork" class="btn btn-primary">Asignar Tarea</button>
 				</form>
 			</div>
 			<div class="col">			

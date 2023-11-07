@@ -29,7 +29,7 @@ public class RepositoryDB {
 	}
 	
 	
-	public static EmployeeProject findEmployeeProject(int idEmployee, int idProject) throws Exception {
+	public static EmployeeProject findEmployeeProject(EmployeeProject eP) throws Exception {
 		Session session = null;
 		EmployeeProject result = null;
 		try {
@@ -39,7 +39,7 @@ public class RepositoryDB {
 		}
 		
 		try {
-			result = (EmployeeProject) session.createSelectionQuery("From EmployeeProject where idEmployee = :id_Employee and idProject = :id_Project", EmployeeProject.class);
+			result = session.find(EmployeeProject.class,eP);
 		} catch (Exception e) {
 			throw new Exception("error al obtener la entidad");
 		}
