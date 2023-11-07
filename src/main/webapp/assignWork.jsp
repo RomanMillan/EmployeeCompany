@@ -38,11 +38,16 @@
 
 				try{
 					Project project = RepositoryDB.find(Project.class,(int)session.getAttribute("projectSession")); 
+					Employee employee = (Employee)session.getAttribute("employeeSession");
 					
 					EmployeeProject employeeProject = new EmployeeProject();
-					employeeProject.setEmployee((Employee)session.getAttribute("employeeSession"));
+					employeeProject.setEmployee(employee);
 					employeeProject.setTimeWorked(totalTime);
 					employeeProject.setProject(project);
+					
+					RepositoryDB.find(employee.getId(), project.getId());
+					/*TODO: TERMINAR DE REVISAR SI YA HAY EN LA BD  */
+					
 					
 					RepositoryDB.add(employeeProject);
 					

@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import com.jacaranda.model.EmployeeProject;
 import com.jacaranda.utility.ConnectionDB;
 
 public class RepositoryDB {
@@ -26,6 +27,27 @@ public class RepositoryDB {
 		
 		return result;
 	}
+	
+	
+	public static EmployeeProject findEmployeeProject(int idEmployee, int idProject) throws Exception {
+		Session session = null;
+		EmployeeProject result = null;
+		try {
+			session = ConnectionDB.getSessionFactory().openSession();
+		} catch (Exception e) {
+			throw new Exception("error en la BD");
+		}
+		
+		try {
+			result = (EmployeeProject) session.createSelectionQuery("From EmployeeProject where idEmployee = :id_Employee and idProject = :id_Project", EmployeeProject.class);
+		} catch (Exception e) {
+			throw new Exception("error al obtener la entidad");
+		}
+		
+		return result;
+	}
+	
+	
 	
 	public static <T> T find(Class<T> c, String id) throws Exception {
 		Session session = null;
@@ -85,6 +107,30 @@ public class RepositoryDB {
 		
 		return obj;
 	}
+	
+	
+	public static Object update(Object obj) throws Exception {
+		Transaction transation = null;
+		Session session = null;
+		try {
+			session = ConnectionDB.getSessionFactory().openSession();
+			transation = session.beginTransaction();
+		} catch (Exception e) {
+			throw new Exception("error en la BD");
+		}
+		
+		try {
+//			Hay que poner persist() ya que el merge() solo busca una id
+			session.merge(obj);
+			transation.commit();
+		} catch (Exception e) {
+			transation.rollback();
+			throw new Exception("error al añadir");
+		}
+		
+		return obj;
+	}
+	
 	
 	public static Object delete(Object obj) throws Exception {
 		Transaction transation = null;
