@@ -1,4 +1,3 @@
-<%@page import="com.jacaranda.utility.ConnectionDB"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.jacaranda.model.EmployeeProject"%>
 <%@page import="com.jacaranda.repository.RepositoryDB"%>
@@ -36,16 +35,32 @@
 		HashMap<String, Integer> working = new HashMap<String, Integer>();
 		
 		/* Miro si se ha puesto a empezar a trabajar */
-		if(request.getParameter("start")!= null){			
+		if(request.getParameter("start")!= null && session.getAttribute("workingSession")== null){			
 			int timeStart = (int)(new Date().getTime()/1000);
+			// Si guardo el id, creo un projectEmployee con el empleado y prouect y lo busco
 			for(CompanyProject companyProject: companyProjects){
 				String p = request.getParameter(companyProject.getProject().getName());					
 				if(p != null){
 					working.put(p, timeStart);										
 				}
-				session.setAttribute("workingSession", working);
 			}
-		}
+			session.setAttribute("workingSession", working);
+		}else if(request.getParameter("start")!= null && session.getAttribute("workingSession")!= null){
+			int timeStart = (int)(new Date().getTime()/1000);
+			working = (HashMap<String, Integer>) session.getAttribute("workingSession");
+			for(CompanyProject companyProject: companyProjects){
+				String p = request.getParameter(companyProject.getProject().getName());					
+				if(p != null){
+					working.put(p, timeStart);										
+				}
+			}
+			/* HashMap<String, Integer> workingBefore = (HashMap<String, Integer>) session.getAttribute("workingSession");
+			for(String key: workingBefore.keySet()){
+				working.put(key, workingBefore.get(key));
+			}
+			 */
+			session.setAttribute("workingSession", working);
+		} 
 		
 		/* Miro si se ha pulsado parar algun trabajo */
 		if(request.getParameter("stop")!= null){		
@@ -90,7 +105,7 @@
 	
 	/* miro si hay algun trabajo en proceso actualmente */
 	if(session.getAttribute("workingSession")!= null){
-		HashMap<String, Integer> workingHM = (HashMap<String, Integer>)	session.getAttribute("workingSession");
+		working = (HashMap<String, Integer>)	session.getAttribute("workingSession");
 		%>
 		<h2>Trabajos en proceso</h2>
 		<ul>
@@ -109,7 +124,7 @@
 		<ul>
 			<form action="selectWork.jsp">
 				<%for(CompanyProject companyProject: companyProjects){
-					if(!workingHM.containsKey(companyProject.getProject().getName())){
+					if(!working.containsKey(companyProject.getProject().getName())){
 				%>
 					<li>
 						<%=companyProject.getProject().getName() %>
@@ -122,6 +137,7 @@
 			</form>
 		</ul> 
 	<%}else{%>
+	<h2>Seleccionar proyecto</h2>
 	<ul>
 		<form action="selectWork.jsp">
 			<%for(CompanyProject companyProject: companyProjects){ %>
