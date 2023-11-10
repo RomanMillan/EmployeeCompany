@@ -18,7 +18,7 @@
 	</head>
 	<body>
 	<div class="container">
-	<h1>Proyectos de empleado</h1>
+	<h1>Proyecto de empleado</h1>
 		<%
 			/* comprueba que el usuario está logeado */
 			if(session.getAttribute("employeeSession")== null){
@@ -38,21 +38,13 @@
 
 				try{
 					Project project = RepositoryDB.find(Project.class,(int)session.getAttribute("projectSession")); 
-					Employee employee = (Employee)session.getAttribute("employeeSession");
 					
 					EmployeeProject employeeProject = new EmployeeProject();
-					employeeProject.setEmployee(employee);
+					employeeProject.setEmployee((Employee)session.getAttribute("employeeSession"));
+					employeeProject.setTimeWorked(totalTime);
 					employeeProject.setProject(project);
-					EmployeeProject newEmployeeProject = RepositoryDB.findEmployeeProject(employeeProject);
-		
-					if(newEmployeeProject == null){
-						employeeProject.setTimeWorked(totalTime);
-						RepositoryDB.add(employeeProject);
-					}else{
-						newEmployeeProject.setTimeWorked(totalTime + employeeProject.getTimeWorked());
-						RepositoryDB.update(newEmployeeProject);
-					}
-
+					
+					RepositoryDB.add(employeeProject);
 					
 				}catch(Exception e){
 					response.sendRedirect("error.jsp?msg=Error al intentar agregar tarea finalizada");
@@ -68,10 +60,9 @@
 			if(request.getParameter("submit")!= null || request.getParameter("resume")!= null){
 				int date = (int)(new Date().getTime()/1000);
 				session.setAttribute("timeStart", date);
-				if(request.getParameter("resume")== null){		
+				if(request.getParameter("resume")== null){					
 					session.setAttribute("projectSession", Integer.parseInt(request.getParameter("project")));
 				}
-				
 				%>
 				<div class="row">
 					<div class="col">
@@ -85,7 +76,7 @@
 						</form>
 					</div>
 				</div>
-				<%
+			<%
 			/* comprueba si el trabajo está pausado */
 			}else if(request.getParameter("pause")!= null){
 				int timeStart = (int) session.getAttribute("timeStart");
@@ -105,7 +96,28 @@
 					</div>
 				</div>
 			<%
-			}%>
+			}else{			
+				Employee employee = null;
+				List<CompanyProject> companyProjects = null;
+				try{
+					employee = (Employee) session.getAttribute("employeeSession");
+					companyProjects = employee.getCompany().getCompanyProject();
+					
+				}catch(Exception e){
+					response.sendRedirect("error.jsp?mgs=Error al cargar los datos");
+					return;
+				}%>
+				<form action="assignWork.jsp" method="post">
+					<div class="input-group mb-3">
+						<select name="project"  class="custom-select">
+							<%for(CompanyProject companyProject: companyProjects){ %>
+							<option value="<%=companyProject.getProject().getId()%>"><%=companyProject.getProject().getName() %></option>
+							<%} %>
+						</select>
+						<button type="submit" name="submit" class="btn btn-primary">Empezar</button>
+					</div>
+				</form>
+			<%}%>
 		</div>
 	</body>
 </html>

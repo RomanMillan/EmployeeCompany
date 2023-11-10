@@ -1,3 +1,4 @@
+<%@page import="java.util.Enumeration"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.jacaranda.model.EmployeeProject"%>
 <%@page import="com.jacaranda.repository.RepositoryDB"%>
@@ -32,33 +33,33 @@
 			return;
 		}
 	
-		HashMap<String, Integer> working = new HashMap<String, Integer>();
 		
+		HashMap<String, Integer> working = new HashMap<String, Integer>();
 		/* Miro si se ha puesto a empezar a trabajar */
 		if(request.getParameter("start")!= null && session.getAttribute("workingSession")== null){			
 			int timeStart = (int)(new Date().getTime()/1000);
-			// Si guardo el id, creo un projectEmployee con el empleado y prouect y lo busco
-			for(CompanyProject companyProject: companyProjects){
-				String p = request.getParameter(companyProject.getProject().getName());					
-				if(p != null){
-					working.put(p, timeStart);										
+		
+			Enumeration<String> parameterNames = request.getParameterNames();
+			
+			while (parameterNames.hasMoreElements()){
+				String aux = parameterNames.nextElement();
+				if(!aux.equals("start")){					
+					working.put(aux, timeStart);						
 				}
 			}
 			session.setAttribute("workingSession", working);
+			
 		}else if(request.getParameter("start")!= null && session.getAttribute("workingSession")!= null){
 			int timeStart = (int)(new Date().getTime()/1000);
 			working = (HashMap<String, Integer>) session.getAttribute("workingSession");
-			for(CompanyProject companyProject: companyProjects){
-				String p = request.getParameter(companyProject.getProject().getName());					
-				if(p != null){
-					working.put(p, timeStart);										
+			Enumeration<String> parameterNames = request.getParameterNames();
+			while (parameterNames.hasMoreElements()){
+				String aux = parameterNames.nextElement();
+				if(!aux.equals("start")){					
+					working.put(aux, timeStart);						
 				}
 			}
-			/* HashMap<String, Integer> workingBefore = (HashMap<String, Integer>) session.getAttribute("workingSession");
-			for(String key: workingBefore.keySet()){
-				working.put(key, workingBefore.get(key));
-			}
-			 */
+			
 			session.setAttribute("workingSession", working);
 		} 
 		
@@ -68,44 +69,46 @@
 			working = (HashMap<String, Integer>) session.getAttribute("workingSession");
 			
 			int timeStop = (int)(new Date().getTime()/1000);
-			
-			for(CompanyProject companyProject: companyProjects){
-				String p = request.getParameter(companyProject.getProject().getName());					
-				if(p != null){
-					if(working.get(p) != null){
-						int totalTime = timeStop - working.get(p).intValue();
-						
-						try{
-							Project project = RepositoryDB.find(Project.class, companyProject.getProject().getId());
-							
-							employee = (Employee)session.getAttribute("employeeSession");
-							
-							EmployeeProject employeeProject = new EmployeeProject();
-							employeeProject.setEmployee(employee);
-							employeeProject.setProject(project);
-							
-							EmployeeProject newEmployeeProject = RepositoryDB.findEmployeeProject(employeeProject);
-							if(newEmployeeProject == null){
-								employeeProject.setTimeWorked(totalTime);
-								RepositoryDB.add(employeeProject);
-							}else{
-								newEmployeeProject.setTimeWorked(totalTime + employeeProject.getTimeWorked());
-								RepositoryDB.update(newEmployeeProject);
+			Enumeration<String> parameterNames = request.getParameterNames();
+			while (parameterNames.hasMoreElements()){
+				String aux = parameterNames.nextElement();
+				if(!aux.equals("stop")){					
+					int totalTime = timeStop - working.get(aux).intValue();											
+					try{
+						employee = (Employee)session.getAttribute("employeeSession");
+						List<CompanyProject> companyProyects = employee.getCompany().getCompanyProject();
+						Project project = new Project();
+						for(CompanyProject cp: companyProjects){
+							if(cp.getProject().getName().equals(aux)){
+								project = cp.getProject();
 							}
-						}catch(Exception e){
-							response.sendRedirect("error.jsp?msg=Error al intentar agregar tarea finalizada");
-							return;			
 						}
-						working.remove(p);						
+						
+						EmployeeProject employeeProject = new EmployeeProject();
+						employeeProject.setEmployee(employee);
+						employeeProject.setProject(project);
+						
+						EmployeeProject newEmployeeProject = RepositoryDB.findEmployeeProject(employeeProject);
+						if(newEmployeeProject == null){
+							employeeProject.setTimeWorked(totalTime);
+							RepositoryDB.add(employeeProject);
+						}else{
+							newEmployeeProject.setTimeWorked(totalTime + employeeProject.getTimeWorked());
+							RepositoryDB.update(newEmployeeProject);
+						}
+					}catch(Exception e){
+						response.sendRedirect("error.jsp?msg=Error al intentar agregar tarea finalizada");
+						return;			
 					}
-				}	
+					working.remove(aux);						
 				}
+			}				
 				session.setAttribute("workingSession", working);
 			}
 	
 	/* miro si hay algun trabajo en proceso actualmente */
 	if(session.getAttribute("workingSession")!= null){
-		working = (HashMap<String, Integer>)	session.getAttribute("workingSession");
+		working = (HashMap<String, Integer>) session.getAttribute("workingSession");
 		%>
 		<h2>Trabajos en proceso</h2>
 		<ul>

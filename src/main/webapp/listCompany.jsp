@@ -32,7 +32,7 @@
 		%>		
 		<div class="row">
 			<div class="col">
-				<form action="selectWork.jsp" method="post">
+				<form action="assignWork.jsp" method="post">
 					<button type="submit" name="selectWork" class="btn btn-primary">Asignar Tarea</button>
 				</form>
 			</div>
