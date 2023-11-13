@@ -120,12 +120,11 @@ public class RepositoryDB {
 		}
 		
 		try {
-//			Hay que poner persist() ya que el merge() solo busca una id
 			session.merge(obj);
 			transation.commit();
 		} catch (Exception e) {
 			transation.rollback();
-			throw new Exception("error al añadir");
+			throw new Exception("error al actualizar");
 		}
 		
 		return obj;

@@ -47,7 +47,7 @@
 			employee.setDateOfBirth(birthdate);
 			employee.setCompany(companyObj);
 			
-			RepositoryDB.add(employee);
+			RepositoryDB.update(employee);
 					
 		}else{			
 			String idEmployee = request.getParameter("idEmployee");
@@ -99,7 +99,7 @@
 				   <%} %>
 				  </select>
 				 </div>
-				<button type="submit" name="submit" class="btn btn-primary">Añadir</button>
+				<button type="submit" name="submit" class="btn btn-primary">Actualizar</button>
 			</form>
 		</div>
 	

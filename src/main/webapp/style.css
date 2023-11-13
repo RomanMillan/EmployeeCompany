@@ -4,3 +4,7 @@ hr{
 	height: 10px !important;
 	background-color: red; 
 }
+
+li{
+	list-style-type: none;
+}
