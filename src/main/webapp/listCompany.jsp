@@ -14,26 +14,41 @@
 		<link href="style.css" rel="stylesheet">
 	</head>
 	<body>
-	<div class="container">
-		<%
-		/* Comprueba que el usuario está logeado */
-		if(session.getAttribute("employeeSession")== null){
-			response.sendRedirect("error.jsp?msg=debe estar logeado");
-			return;
-		}
 	
-		ArrayList<Company> result = null;
+			<%
+			/* Comprueba que el usuario está logeado */
+			if(session.getAttribute("employeeSession")== null){
+				response.sendRedirect("error.jsp?msg=debe estar logeado");
+				return;
+			}
 		
-		try{
-			result = (ArrayList<Company>) RepositoryDB.findAll(Company.class);
-		}catch(Exception e){
+			ArrayList<Company> result = null;
 			
-		}
-		%>		
+			try{
+				result = (ArrayList<Company>) RepositoryDB.findAll(Company.class);
+			}catch(Exception e){
+				
+			}
+			
+			Employee employee = (Employee) session.getAttribute("employeeSession");
+			
+			%>		
+	<nav class="navbar navbar-light bg-light">
+	  <div class="container-fluid">
+	    <%=employee.getFirstName() %>
+	  </div>
+	</nav>
+	
+	<div class="container">
 		<div class="row">
 			<div class="col">
 				<form action="selectWork.jsp" method="post">
 					<button type="submit" name="selectWork" class="btn btn-primary">Asignar Tarea</button>
+				</form>
+			</div>
+			<div class="col">			
+				<form action="updateEmployee.jsp" method="post">
+					<button type="submit" name="updateEmployee" class="btn btn-warning">Modificar Usuario</button>
 				</form>
 			</div>
 			<div class="col">			

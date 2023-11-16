@@ -44,7 +44,6 @@
 						String encrypt = DigestUtils.md5Hex(password);
 						
 						Employee employee = new Employee();
-						employee.setId(1000);
 						employee.setFirstName(firstName);
 						employee.setLastName(lastName);
 						employee.setEmail(email);

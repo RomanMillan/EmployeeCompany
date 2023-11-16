@@ -18,6 +18,9 @@
 			}catch(Exception e){
 				
 			}
+			
+			Employee employee = (Employee) session.getAttribute("employeeSession");
+			
 		%>
 		
 		
